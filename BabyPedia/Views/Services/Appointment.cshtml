@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Appointment";
+    List<SelectListItem> list = new List<SelectListItem>();
+    list.Add(new SelectListItem() { Text = "Home Service", Value = "Home Service" });
+    list.Add(new SelectListItem() { Text = "Vacination", Value = "Vaccination" });
+    list.Add(new SelectListItem() { Text = "Consultation", Value = "Consultation" });
+
+}
+
+<div class="text-center">
+    <h1 class="display-4">Appointment Booking</h1>
+</div>
+
+<div>
+    Pediatrician: <input type="text" name="Pedia" id="PediaName" value=""/>
+</div>
+
+<div>
+    Appointment Type: @Html.DropDownList("AppointmentType", list, "")
+</div>
+
+<div>
+    Child Name: <input type="text" name="CName" id="ChildName" value="" />
+</div>
+
+<div>
+    Date and Time: <input type="text" name="DT" id="DateTime" value="" />
+</div>
+
+<input type="submit" value="Request Appointment"/>

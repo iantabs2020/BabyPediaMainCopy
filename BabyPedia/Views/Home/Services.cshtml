@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Services";
+}
+
+<style>
+    #wrap{
+    width:100%;
+    margin:0 auto;
+}
+.box{
+    float:left;
+    width:48%;
+    height:200px;
+    background:white;
+    border:2px solid white;
+    margin:0 auto;
+    padding: 70px;
+ 
+    }
+</style>
+
+
+<h1 class="me-3 mb-2 long-rounded">
+    <p class="text-center">
+        <span class="text-danger">
+            BabyPedia
+        </span>
+        <span class="text-dark">
+            Services
+            </span>
+    </p>
+</h1>
+<div id="wrap" class="box" >
+       <a href='@Url.Action("OnlineConsultation", "Services")'>
+            <img src="~/images/srvclog.png" class="user "
+         style="width:120px;height:120px;">Online Consultation
+        </a>
+
+
+
+
+<a href='@Url.Action("Vaccination", "Services")'>
+        <img src="~/images/needle.png" class="user "
+             style="width:120px;height:120px;">Vaccination
+    </a>
+
+</div>
+
+<div id="wrap" class="box">
+<a href='@Url.Action("Appointment", "Services")'>
+    <img src="~/images/srvclog.png" class="user "
+         style="width:120px;height:120px;">Appointment Booking
+</a>
+
+<a href='@Url.Action("RecordTracking", "Services")'>
+    <img src="~/images/srvclog.png" class="user "
+         style="width:120px;height:120px;">Record Tracking
+</a>
+
+</div>

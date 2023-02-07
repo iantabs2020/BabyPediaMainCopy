@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "ParentWelcome";
+}
+
+
+<style>
+    #selection {
+        position: absolute;
+        top: 50%;
+        left: 65%;
+        margin-top: -50px;
+        margin-right: -50px;
+        height: 100px
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    #one, #two, #three, #four {
+        font-size: 30px;
+    }
+</style>
+
+
+<div class="col-md-6 col-6">
+    <img src="~/images/home_register.jpg" />
+</div>
+
+
+<div class="col-md-6 col-6" id="selection">
+    <a href='@Url.Action("OnlineConsultation", "Services")' class="text-dark" id="one">Online Appointment</a>
+    &nbsp;<br /> <br />
+    <a href='@Url.Action("PatientRecord", "Services")' class="text-danger" id="two">Patient Record</a>
+    &nbsp; <br /> <br />
+    <a href='@Url.Action("Vaccination", "Services")' class="text-dark" id="three">Vaccine Information</a>
+    &nbsp;<br /> <br />
+    <a href='@Url.Action("SubscriptionP", "Services")' class="text-danger" id="four">Subscription Payment</a>
+    &nbsp;
+</div>
+
+
+
+
