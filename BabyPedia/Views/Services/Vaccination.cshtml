@@ -2,11 +2,67 @@
     ViewData["Title"] = "Vaccination";
 }
 
+<style>
+table,
+table td {
+  border: 1px solid #cccccc;
+  margin-left:auto;
+  margin-right:auto;
+  border-collapse: separate
+}
+
+td {
+  height: 60px;
+  width: 300px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: lightgray;
+  font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+</style>
+
 <h1 class="me-3 mb-2 long-rounded">
     <p class="text-center">
-    <span class="text-danger">
-            Vaccination
+    <span class="text-primary">
+            Vaccine Information
         </span>
     </p>
 </h1>
+
+<h6 class="me-3 mb-2 long-rounded">
+    <p class="text-center">
+        <span class="text-primary">
+            Vaccine Name
+        </span>
+    </p>
+</h6>
+
+
+<table>
+    <tr>
+        <td>
+            <a href='@Url.Action("HepA", "VaccineInfo")' class="text-dark">HepA</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href='@Url.Action("BCG", "VaccineInfo")' class="text-dark">BCG</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href='@Url.Action("MMR", "VaccineInfo")' class="text-dark">MMR</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href='@Url.Action("IPV", "VaccineInfo")' class="text-dark">IPV</a>
+        </td>
+    </tr>
+</table>
+
 
