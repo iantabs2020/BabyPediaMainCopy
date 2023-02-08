@@ -1,0 +1,48 @@
+﻿@page
+@model BabyPedia.Pages.Pedia.AddImmunizationRecord
+
+@{
+    ViewData["Registered"] = true;
+    Layout = "_Layout";
+}
+
+<div class="text-center container-fluid row text-primary">
+    <h1 class="display-4 long-rounded fw-bold">New Immunization Entry</h1>
+</div>
+<div class="container-fluid row">
+    <div class="col-md-6 col-12">
+        <div class="form-floating mb-3">
+            <select class="form-select" aria-label="Child's Name">
+            </select>
+            <label for="fname">Child's Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            <select class="form-select" aria-label="Vaccine Name">
+            </select>
+            <label for="fname">Vaccine Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="f21312name">
+            <label for="f21312name">Dose Number</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="date" class="form-control" id="f21312name">
+            <label for="f21312name">Date</label>
+        </div>
+    </div>
+    <div class="col-md-6 col-12">
+
+
+        <div class="form-floating mb-3">
+            <textarea type="date" class="form-control" id="f21312name">
+        </textarea>
+            <label for="f21312name">Remarks</label>
+        </div>
+        <div class="flex-column d-flex justify-content-between">
+            <button class="btn btn-primary">
+                <i class="bi bi-arrow-bar-right"></i> Confirm
+            </button>
+        </div>
+    </div>
+</div>

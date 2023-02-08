@@ -1,0 +1,32 @@
+﻿@page
+@model BabyPedia.Pages.Admin.SendEmail
+
+@{
+    ViewData["Registered"] = true;
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <h1 class="text-center">
+        <p class="text-center fw-bold text-primary">
+            Send Email
+        </p>
+    </h1>
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="email">
+        <label for="email">Recipients</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="sub">
+        <label for="sub">Subject</label>
+    </div>
+    <div class="form-floating mb-3">
+        <textarea type="text" class="form-control" id="sub">
+    </textarea>
+        <label for="sub">Message</label>
+    </div>
+    <div>
+        <button class="btn btn-primary">Send</button>
+    </div>
+</div>

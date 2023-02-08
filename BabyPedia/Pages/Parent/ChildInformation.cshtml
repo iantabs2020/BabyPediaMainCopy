@@ -1,0 +1,55 @@
+﻿@page
+@model BabyPedia.Pages.Parent.ChildInformation
+
+@{
+    ViewData["Registered"] = true;
+    Layout = "_Layout";
+}
+
+<div class="text-center container-fluid row text-primary">
+    <h1 class="display-4 long-rounded fw-bold">Child's Information</h1>
+</div>
+<div class="container-fluid row">
+    <div class="col-md-6 col-12">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fname">
+            <label for="fname">First Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="lname">
+            <label for="lname">Last Name</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="lnaasdasdme">
+            <label for="lnaasdasdme">Birth Date</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="lnaadwqdsdasdme">
+            <label for="lnaadwqdsdasdme">Place of Birth</label>
+        </div>
+
+    </div>
+    <div class="col-md-6 col-12">
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="f21312name">
+            <label for="f21312name">Birth Height</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="lnaasdme">
+            <label for="lnaasdme">Birth Weight</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="lnaaqwdqwsdrsdasdme">
+            <label for="lnaaqwdqwsdrsdasdme">Sex</label>
+        </div>
+
+        <div class="flex-column d-flex justify-content-between">
+            <button class="btn btn-primary">
+                <i class="bi bi-arrow-bar-right"></i> Confirm
+            </button>
+        </div>
+    </div>
+</div>
