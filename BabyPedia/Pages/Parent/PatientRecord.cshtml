@@ -1,0 +1,43 @@
+﻿@page
+@{
+    ViewBag.Title = "Patient Record";
+    Layout = "_Layout";
+}
+
+
+<div class="mx-auto mt-4">
+    <h1 class="text-center">
+        <p class="text-center fw-bold text-primary">
+            @ViewBag.Title
+        </p>
+    </h1>
+    <table class="table m-2 table-borderless">
+        <thead>
+        <tr>
+            <th scope="col" class="text-primary">Child's Name</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row" class="">Juan Dela Cruz</th>
+            <th>
+                <button class="btn btn-primary border-0" style="background-color: #FF9E7A !important;">Child Information</button>
+            </th>
+            <th>
+                <button class="btn btn-primary border-0" style="background-color: #1C88C6 !important;">Immunization Record</button>
+            </th>
+        </tr>
+        <tr>
+            <th scope="row" class="">John Dela Cruz</th>
+            <th>
+                <button class="btn btn-primary border-0" style="background-color: #FF9E7A !important;">Child Information</button>
+            </th>
+            <th>
+                <button class="btn btn-primary border-0" style="background-color: #1C88C6 !important;">Immunization Record</button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</div>

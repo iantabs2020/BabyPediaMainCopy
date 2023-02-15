@@ -1,0 +1,95 @@
+﻿@page
+@using BabyPedia.Data
+@using BabyPedia.Utilities
+@using Microsoft.EntityFrameworkCore
+@model BabyPedia.Pages.Parent.RegisterAppointment
+@inject BabyPediaContext DbContext
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "New Appointment";
+
+    var pedias = await DbContext.PartneredPedias.ToListAsync();
+}
+
+<div class="row">
+    <div class="container">
+        <form id="registerForm" action="/register-appointment" method="post">
+            <h2 class="mt-2">Create a new appointment.</h2>
+            <p>
+                Create an appointment below, specify the date as well as a message to the pedia.
+            </p>
+            <hr/>
+            <div class="form-floating mb-3">
+                <input id="birthdate-id" type="date" name="date" class="form-control" aria-required="true"/>
+                <label for="birthdate-id">Date of Visit</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input id="child-name" type="text" name="child" class="form-control" aria-required="true"/>
+                <label for="child-name">Child's Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input id="birthdate-id2" type="time" name="time" class="form-control" aria-required="true"/>
+                <label for="birthdate-id2">Time of Visit</label>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea style="height: 150px;" id="desc" rows="5" type="text" name="description" class="form-control" autocomplete="off" aria-required="true" placeholder=""></textarea>
+                <label for="desc">Message</label>
+            </div>
+
+            <div class="mb-3">
+                <select class="form-select" name="appointmentType">
+                    <option selected>Appointment Type</option>
+                    <option value="Vaccination">Vaccination</option>
+                    <option value="Consultation">Consultation</option>
+                    <option value="Home Service">Home Service</option>
+                </select>
+            </div>
+
+            @if (pedias.Any())
+            {
+                <select class="form-select" name="pedia">
+                    <option selected >Select a pedia</option>
+                    @foreach (var pedia in pedias)
+                    {
+                        <option value="@pedia.Id">@pedia.FirstName @pedia.LastName</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    There are no pedias registered!
+                </div>
+            }
+
+            <button style="background-color: #FF9E7A !important;" id="registerSubmit" type="button" class="w-100 m-2 btn btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-hand-thumbs-up-fill"></i> Submit</button>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-send-fill"></i> Submit</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @* <div class="input-group mb-3"> *@
+                            @*     <span class="input-group-text" id="basic-addon1">₱</span> *@
+                            @*     <input disabled value="600.00" type="text" class="form-control" aria-describedby="basic-addon1"> *@
+                            @* </div> *@
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">₱</span>
+                                <input id="user-payment" name="paid" type="text" class="form-control" aria-describedby="basic-addon1">
+                                <label class="form-control" for="user-payment">Your Payment</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Pay</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
