@@ -1,7 +1,34 @@
-﻿@{
+﻿@model PartneredPedia
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     ViewData["Title"] = "Pedia Registration";
+
+
+    var textBoxClasses = new Dictionary<string, object>()
+{
+        { "class", "form-control" },
+        // { "readonly", "readonly" },
+    };
 }
 
+@if (HttpContextAccessor.HttpContext.Request.Query.TryGetValue("error", out var errorString))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorString
+    </div>
+}
+<script>
+
+        var checkForm = function (form) {
+            if (!form.personal.checked) {
+                alert("Please indicate that your personal data will be uploaded to the internet");
+                form.personal.focus();
+             return false;
+            }
+            return true;
+     };
+
+</script>
 
 <div class="text-center container-fluid row text-primary">
     <h1 class="display-4 long-rounded fw-bold">Registration</h1>
@@ -10,68 +37,70 @@
     </p>
 </div>
 <div class="container-fluid row">
-    <div class="col-md-6 col-12">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="username">
-            <label for="username">Username</label>
+    <form method="post" class="container-fluid row" action="/register-pedia" onsubmit="return checkForm(this)">
+        <div class="col-md-6 col-12">
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.UserName, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.UserName)
+            </div>
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.Email, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.Email)
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" name="password">
+                <label for="password">Password</label>
+            </div>
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.FirstName, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.FirstName)
+            </div>
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.LastName, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.LastName)
+            </div>
         </div>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="email">
-            <label for="email">Email</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password">
-            <label for="password">Password</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="fname">
-            <label for="fname">First Name</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="lname">
-            <label for="lname">Last Name</label>
-        </div>
-    </div>
-    <div class="col-md-6 col-12">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="addr">
-            <label for="addr">Address</label>
-        </div>
+        <div class="col-md-6 col-12">
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.Address, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.Address)
+            </div>
 
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="contactNum">
-            <label for="contactNum">Contact Number</label>
-        </div>
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.ContactNumber, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.ContactNumber)
+            </div>
 
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="prcLicense">
-            <label for="prcLicense">PRC License Number</label>
-        </div>
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.PrcLicenseNumber, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.PrcLicenseNumber)
+            </div>
 
-        <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="prcExpiration">
-            <label for="prcExpiration">PRC Expiration Date</label>
-        </div>
+            <div class="form-floating mb-3">
+                @Html.TextBoxFor(m => m.PrcExpiration, htmlAttributes: textBoxClasses)
+                @Html.LabelFor(x => x.PrcExpiration)
+            </div>
 
-        <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="" id="toscheck">
-            <label class="form-check-label" for="toscheck">
-                I agree to the <strong>Terms of Service</strong> and <strong>Privacy Policy</strong>
-            </label>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="" id="toscheck">
+                <label class="form-check-label" for="toscheck">
+                    I agree to the <strong>Terms of Service</strong> and <strong>Privacy Policy</strong>
+                </label>
+            </div>
+            <div class="form-check mb-2">
+                <input name="personal" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    I understand that personal data will be uploaded to the internet
+                </label>
+            </div>
+            <div class="flex-column d-flex justify-content-between">
+                <a class="mb-2 nav-link">Already have an account?</a>
+                <button class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-right"></i> Register
+                </button>
+            </div>
         </div>
-        <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-                I understand that personal data will be uploaded to the internet
-            </label>
-        </div>
-        <div class="flex-column d-flex justify-content-between">
-            <a class="mb-2 nav-link">Already have an account?</a>
-            <button class="btn btn-primary">
-                <i class="bi bi-arrow-bar-right"></i> Register
-            </button>
-        </div>
-    </div>
+    </form>
 </div>
 @* *@
 @* <div class="text-center"> *@

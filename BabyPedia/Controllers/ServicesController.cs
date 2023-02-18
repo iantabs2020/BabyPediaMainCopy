@@ -17,11 +17,11 @@ namespace BabyPedia.Controllers
         {
             return View();
         }
-
-        public IActionResult Appointment()
-        {
-            return View();
-        }
+        //
+        // public IActionResult Appointment()
+        // {
+        //     return View();
+        // }
 
         public IActionResult RecordTracking()
         {

@@ -1,50 +1,82 @@
-﻿@{
+﻿@model Parent
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     ViewData["Title"] = "Parent Registration";
+
+    var textBoxClasses = new Dictionary<string, object>()
+{
+        { "class", "form-control" },
+        // { "readonly", "readonly" },
+    };
+
 }
 
+@if (HttpContextAccessor.HttpContext.Request.Query.TryGetValue("error", out var errorString))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorString
+    </div>
+}
 <div class="text-center container-fluid row text-primary">
     <h1 class="display-4 long-rounded fw-bold">Registration</h1>
     <p class="fw-bold text-dark">
         Register a BabyPedia account
     </p>
 </div>
-<div class="container-fluid row">
+<script>
+
+    var checkForm = function (form) {
+        if (!form.tos.checked) {
+            alert("Please indicate that you accept the Terms and Conditions");
+            form.tos.focus();
+            return false;
+        }
+        if (!form.personalcheck.checked) {
+            alert("Please indicate that your personal data will be uploaded to the internet");
+            form.personalcheck.focus();
+            return false;
+        }
+        return true;
+    };
+
+</script>
+<form class="container-fluid row" onsubmit="return checkForm(this)" method="post" action="/register-parent">
     <div class="col-md-6 col-12">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="username">
-            <label for="username">Username</label>
+            @Html.TextBoxFor(m => m.UserName, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.UserName)
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="email">
-            <label for="email">Email</label>
+            @Html.TextBoxFor(m => m.Email, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.Email)
         </div>
         <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password">
+            <input type="password" class="form-control" id="password" name="password">
             <label for="password">Password</label>
         </div>
     </div>
     <div class="col-md-6 col-12">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="fname">
-            <label for="fname">First Name</label>
+            @Html.TextBoxFor(m => m.FirstName, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.FirstName)
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="lname">
-            <label for="lname">Last Name</label>
+            @Html.TextBoxFor(m => m.LastName, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.LastName)
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="addr">
-            <label for="addr">Address</label>
+            @Html.TextBoxFor(m => m.Address, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.Address)
         </div>
 
         <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="" id="toscheck">
+            <input name="tos" class="form-check-input" type="checkbox" value="" id="toscheck">
             <label class="form-check-label" for="toscheck">
                 I agree to the <strong>Terms of Service</strong> and <strong>Privacy Policy</strong>
             </label>
         </div>
         <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <input name="personalcheck" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
             <label class="form-check-label" for="flexCheckDefault">
                 I understand that personal data will be uploaded to the internet
             </label>
@@ -56,7 +88,7 @@
             </button>
         </div>
     </div>
-</div>
+</form>
 @* *@
 @* <div class="text-center"> *@
 @*     <h1 class="display-4">Register a BabyPedia Account</h1> *@
