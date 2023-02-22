@@ -1,0 +1,71 @@
+﻿@page
+@using BabyPedia.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+
+@inject BabyPediaContext DbContext
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    var currentParent = await DbContext.Parents
+        .Include(x => x.Appointments)
+        .ThenInclude(x => x.AppointmentType)
+        .Include(x => x.Appointments)
+        .ThenInclude(x => x.Pedia)
+        .Include(x => x.Appointments)
+        .ThenInclude(x => x.Child)
+        .Include(x => x.Appointments)
+        .ThenInclude(x => x.Payment)
+        .FirstOrDefaultAsync(x => x.Id == UserManager.GetUserId(User));
+
+    ViewData["Registered"] = true;
+    Layout = "_Layout";
+}
+
+
+@if (currentParent?.Appointments.LastOrDefault() is { } appointment)
+{
+    <div class="container">
+        <h1 class="text-center">
+            <p class="text-center fw-bold text-primary">
+                Current Appointment
+            </p>
+        </h1>
+        <p style="background-color: #C1EBC2 !important; color: #82D586" class="fw-bold rounded-3 p-2 container-fluid row m-2">Payment Successful! Launch meeting button will be clickable once doctor is ready!</p>
+        <div style="background-color: #F9909C !important;" class="rounded-3 m-2 fw-bold p-3 container-fluid row">
+            <div class="col">
+                <p class="row">
+                    Name of pediatrician: @appointment.Pedia.FirstName @appointment.Pedia.LastName
+                </p>
+                <p class="row">
+                    Service: @appointment.AppointmentType.Name
+                </p>
+                <p class="row">
+                    Date: @appointment.AppointmentDate
+                </p>
+                <p class="row">
+                    Time: @appointment.AppointmentTime
+                </p>
+            </div>
+            <div class="col">
+                <p class="row">
+                    Patient Name: @currentParent.FirstName @currentParent.LastName
+                </p>
+                <p class="row">
+                    Service: @appointment.AppointmentType.Name
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row container">
+        <a href="" class="btn-primary btn m-2">View Prescription</a>
+        <a href="" class="btn-success btn m-2">Download</a>
+        <a href="" class="btn-danger btn m-2">Launch Meeting</a>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        You have no current appointment!
+    </div>
+}
