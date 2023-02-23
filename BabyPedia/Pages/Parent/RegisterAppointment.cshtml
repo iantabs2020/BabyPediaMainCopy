@@ -1,15 +1,18 @@
 ﻿@page
 @using BabyPedia.Data
 @using BabyPedia.Utilities
+@using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @model BabyPedia.Pages.Parent.RegisterAppointment
 @inject BabyPediaContext DbContext
+@inject UserManager<IdentityUser> UserManager
 
 @{
     Layout = "_Layout";
     ViewData["Title"] = "New Appointment";
 
     var pedias = await DbContext.PartneredPedias.ToListAsync();
+    var children = await DbContext.Children.Where(x => x.Parent.Id == UserManager.GetUserId(User)).ToListAsync();
 }
 
 <div class="row">
@@ -24,10 +27,24 @@
                 <input id="birthdate-id" type="date" name="date" class="form-control" aria-required="true"/>
                 <label for="birthdate-id">Date of Visit</label>
             </div>
-            <div class="form-floating mb-3">
-                <input id="child-name" type="text" name="child" class="form-control" aria-required="true"/>
-                <label for="child-name">Child's Name</label>
-            </div>
+
+            @if (children.Any())
+            {
+                <select class="form-select mb-3" name="child">
+                    <option selected>Select a child</option>
+                    @foreach (var child in children)
+                    {
+                        <option value="@child.Id">@child.Username</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    No Children Registered! <a href="/parent/childinformation" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Child</a>
+                </div>
+            }
+
             <div class="form-floating mb-3">
                 <input id="birthdate-id2" type="time" name="time" class="form-control" aria-required="true"/>
                 <label for="birthdate-id2">Time of Visit</label>
@@ -49,7 +66,7 @@
             @if (pedias.Any())
             {
                 <select class="form-select" name="pedia">
-                    <option selected >Select a pedia</option>
+                    <option selected>Select a pedia</option>
                     @foreach (var pedia in pedias)
                     {
                         <option value="@pedia.Id">@pedia.FirstName @pedia.LastName</option>
@@ -59,7 +76,7 @@
             else
             {
                 <div class="alert alert-danger" role="alert">
-                    There are no pedias registered!
+                    There are no pedias registered! 
                 </div>
             }
 
