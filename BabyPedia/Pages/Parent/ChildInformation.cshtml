@@ -1,49 +1,58 @@
 ﻿@page
-@model BabyPedia.Pages.Parent.ChildInformation
+@model BabyPedia.Models.Child
 
 @{
     ViewData["Registered"] = true;
     Layout = "_Layout";
+    
+    var textBoxClasses = new Dictionary<string, object>()
+    {
+        { "class", "form-control" },
+        // { "readonly", "readonly" },
+    };
+
 }
 
 <div class="text-center container-fluid row text-primary">
     <h1 class="display-4 long-rounded fw-bold">Child's Information</h1>
 </div>
-<div class="container-fluid row">
+
+<form class="container-fluid row" action="/register-child" method="post">
     <div class="col-md-6 col-12">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="fname">
-            <label for="fname">First Name</label>
+            @Html.TextBoxFor(m => m.FirstName, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.FirstName)
+        </div>
+        
+        <div class="form-floating mb-3">
+            @Html.TextBoxFor(m => m.LastName, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.LastName)
+        </div>
+        
+        <div class="form-floating mb-3">
+            @Html.TextBoxFor(m => m.DateTimeCreated, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.DateTimeCreated)
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="lname">
-            <label for="lname">Last Name</label>
-        </div>
-
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="lnaasdasdme">
-            <label for="lnaasdasdme">Birth Date</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="lnaadwqdsdasdme">
-            <label for="lnaadwqdsdasdme">Place of Birth</label>
+            @Html.TextBoxFor(m => m.PlaceOfBirth, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.PlaceOfBirth)
         </div>
 
     </div>
     <div class="col-md-6 col-12">
 
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="f21312name">
-            <label for="f21312name">Birth Height</label>
+            @Html.TextBoxFor(m => m.BirthHeight, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.BirthHeight)
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="lnaasdme">
-            <label for="lnaasdme">Birth Weight</label>
+            @Html.TextBoxFor(m => m.BirthWeight, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.BirthWeight)
         </div>
 
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="lnaaqwdqwsdrsdasdme">
-            <label for="lnaaqwdqwsdrsdasdme">Sex</label>
+            @Html.TextBoxFor(m => m.Sex, htmlAttributes: textBoxClasses)
+            @Html.LabelFor(x => x.Sex)
         </div>
 
         <div class="flex-column d-flex justify-content-between">
@@ -52,4 +61,4 @@
             </button>
         </div>
     </div>
-</div>
+</form>
