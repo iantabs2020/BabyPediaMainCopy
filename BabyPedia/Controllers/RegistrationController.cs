@@ -66,6 +66,94 @@ namespace BabyPedia.Controllers
             }
         }
 
+        [HttpPost("register-child")]
+        public async Task<IActionResult> RegisterChild(BabyPedia.Models.Child child)
+        {
+            // var roleName = "Parent";
+            //
+            // var roleExists = await _roleManager.RoleExistsAsync(roleName);
+            // if (!roleExists)
+            // {
+            //     var role = new IdentityRole(roleName);
+            //     var result = await _roleManager.CreateAsync(role);
+            //     if (!result.Succeeded)
+            //     {
+            //         return Redirect(
+            //             $"/Registration/ParentRegistration?error=Failed to create role for parent!");
+            //     }
+            // }
+
+            var existingChild = await _dbContext.Children.FirstOrDefaultAsync(x =>
+                x.FirstName.Equals(child.FirstName) && x.LastName.Equals(child.LastName));
+
+            child.Parent = await _dbContext.Parents.FirstOrDefaultAsync(x => x.Id == _userManager.GetUserId(User));
+
+            if (existingChild is null)
+            {
+                await _dbContext.Children.AddAsync(child);
+            }
+            else
+            {
+                existingChild.Sex = child.Sex;
+                existingChild.BirthHeight = child.BirthHeight;
+                existingChild.BirthWeight = child.BirthWeight;
+                existingChild.PlaceOfBirth = child.PlaceOfBirth;
+                existingChild.DateTimeCreated = child.DateTimeCreated;
+
+                _dbContext.Children.Update(child);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+
+            if (User.IsInRole("Parent"))
+                return Redirect("/parent/patientrecord");
+            return Redirect("/pedia/patientrecord");
+        }
+
+
+        [HttpPost("register-account")]
+        public async Task<IActionResult> RegisterUser(Parent parent, [FromForm] string password, [FromForm] string role)
+        {
+            IdentityUser user = role == "Parent"
+                ? parent
+                : new PartneredPedia()
+                {
+                    FirstName = parent.FirstName,
+                    LastName = parent.LastName,
+                    Address = parent.Address,
+                    Email = parent.Email,
+                };
+            var roleName = role;
+
+            var roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExists)
+            {
+                var _role = new IdentityRole(roleName);
+                var result = await _roleManager.CreateAsync(_role);
+                if (!result.Succeeded)
+                {
+                    return Redirect(
+                        $"/admin/newuser?error=Failed to create role for parent!");
+                }
+            }
+
+            var signInResult = await _userManager.CreateAsync(user, password);
+
+            if (signInResult.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, roleName);
+                await _signInManager.SignInAsync(user, true);
+
+                return Redirect("/admin");
+            }
+            else
+            {
+                return Redirect(
+                    $"/admin/newuser?error={signInResult.Errors.FirstOrDefault().Description}");
+            }
+        }
+
         [HttpPost("/register-appointment")]
         public async Task<IActionResult> RegisterAppointment(
             [FromForm] string date,
@@ -74,7 +162,7 @@ namespace BabyPedia.Controllers
             [FromForm] string appointmentType,
             [FromForm] string pedia,
             [FromForm] double paid,
-            [FromForm] string child
+            [FromForm] long child
         )
         {
             var userId = _userManager.GetUserId(User);
@@ -87,18 +175,19 @@ namespace BabyPedia.Controllers
 
             var selectedChild =
                 await _dbContext.Children.FirstOrDefaultAsync(x =>
-                    x.Parent.Id == currentParent.Id && child == x.UserName);
+                    x.Parent.Id == currentParent.Id && child == x.Id);
 
-            if (selectedChild is null)
-            {
-                selectedChild = new Child()
-                {
-                    UserName = child,
-                    Parent = currentParent
-                };
-
-                await _dbContext.Children.AddAsync(selectedChild);
-            }
+            //
+            // if (selectedChild is null)
+            // {
+            //     selectedChild = new Child()
+            //     {
+            //         FirstName = child,
+            //         Parent = currentParent
+            //     };
+            //
+            //     await _dbContext.Children.AddAsync(selectedChild);
+            // }
 
             AppointmentType appointmentTypeObject;
 
@@ -117,8 +206,7 @@ namespace BabyPedia.Controllers
 
             var payment = new AppointmentPayment()
             {
-                Amount = paid,
-                Status = "Paid"
+                Amount = paid, Status = "Paid"
             };
 
             payment = (await _dbContext.AppointmentPayments.AddAsync(payment)).Entity;
@@ -147,6 +235,29 @@ namespace BabyPedia.Controllers
             await _dbContext.SaveChangesAsync();
 
             return Redirect("/parent/appointmentlist");
+        }
+
+        [HttpPost("/add-immunization")]
+        public async Task<IActionResult> RegisterImmunization(
+            ImmunizationRecord immunizationRecord,
+            [FromForm] long childId,
+            [FromForm] long vaccineId
+        )
+        {
+            var curUser =
+                await _dbContext.PartneredPedias.FirstOrDefaultAsync(x => x.Id == _userManager.GetUserId(User));
+            var child = await _dbContext.Children.FirstOrDefaultAsync(x => x.Id == childId);
+            var vaccine = await _dbContext.Vaccines.FirstOrDefaultAsync(x => x.Id == vaccineId);
+
+            immunizationRecord.Vaccine = vaccine.Name;
+            immunizationRecord.AdministeredBy = curUser.Email;
+
+            child.ImmunizationRecord.Add(immunizationRecord);
+
+            _dbContext.Update(child);
+            await _dbContext.SaveChangesAsync();
+
+            return Redirect("/pedia/immunizationrecord/" + child.Id);
         }
 
         [HttpPost("/register-pedia")]
