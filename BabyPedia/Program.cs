@@ -1,4 +1,5 @@
 using BabyPedia.Data;
+using BabyPedia.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,15 +15,16 @@ builder.Services.AddDbContext<BabyPediaContext>(o =>
 });
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 6;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.SignIn.RequireConfirmedEmail = false;
-    options.SignIn.RequireConfirmedPhoneNumber = false;
-    options.SignIn.RequireConfirmedAccount = false;
-})
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+        options.SignIn.RequireConfirmedAccount = false;
+    })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<BabyPediaContext>();
 builder.Services.AddControllersWithViews();
@@ -50,14 +52,183 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Home}/{id?}");
 
+async Task CreateAccountsAndRole(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+{
+    {
+        string adminRoleName = "Admin";
+        string adminEmail = "admin@admin.com";
+        string adminPassword = "AdminPassword123";
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
+        // Check if the admin role exists, and create it if it doesn't
+        if (!await roleManager.RoleExistsAsync(adminRoleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(adminRoleName));
+        }
 
-//    var context = services.GetRequiredService<BabyPediaContext>();
-//    await context.Database.EnsureCreatedAsync();
-//}
+        // Check if the admin user exists, and create it if it doesn't
+        if (await userManager.FindByEmailAsync(adminEmail) == null)
+        {
+            IdentityUser adminUser = new IdentityUser
+            {
+                Email = adminEmail,
+                UserName = adminEmail,
+            };
+
+            IdentityResult result = await userManager.CreateAsync(adminUser, adminPassword);
+
+            if (result.Succeeded)
+                await userManager.AddToRoleAsync(adminUser, adminRoleName);
+        }
+    }
+
+    {
+        string pediaroleName = "Pedia";
+        string pediaEmail = "pedia@pedia.com";
+        string pediaPassword = "password123";
+
+        // Check if the admin role exists, and create it if it doesn't
+        if (!await roleManager.RoleExistsAsync(pediaroleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(pediaroleName));
+        }
+
+        // Check if the admin user exists, and create it if it doesn't
+        if (await userManager.FindByEmailAsync(pediaEmail) == null)
+        {
+            var adminUser = new PartneredPedia()
+            {
+                Email = pediaEmail,
+                UserName = pediaEmail,
+                FirstName = "Michael"
+            };
+
+            IdentityResult result = await userManager.CreateAsync(adminUser, pediaPassword);
+
+            if (result.Succeeded)
+                await userManager.AddToRoleAsync(adminUser, pediaroleName);
+        }
+    }
+
+    {
+        string pediaroleName = "Parent";
+        string pediaEmail = "parent@parent.com";
+        string pediaPassword = "password123";
+
+        // Check if the admin role exists, and create it if it doesn't
+        if (!await roleManager.RoleExistsAsync(pediaroleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(pediaroleName));
+        }
+
+        // Check if the admin user exists, and create it if it doesn't
+        if (await userManager.FindByEmailAsync(pediaEmail) == null)
+        {
+            Parent adminUser = new Parent
+            {
+                Email = pediaEmail,
+                UserName = pediaEmail
+            };
+
+            IdentityResult result = await userManager.CreateAsync(adminUser, pediaPassword);
+
+            if (result.Succeeded)
+                await userManager.AddToRoleAsync(adminUser, pediaroleName);
+        }
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<BabyPediaContext>();
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await context.Database.EnsureCreatedAsync();
+
+    // Add admin.
+    await CreateAccountsAndRole(userManager, roleManager);
+
+    // Add Vaccines.
+    List<Vaccine> vaccines = new List<Vaccine>()
+    {
+        new Vaccine()
+        {
+            Name = "Hepatitis B",
+            LotNumber = "HBV1234",
+            Manufacturer = "AstraZeneca",
+            ExpirationDate = new DateTime(2023, 10, 1),
+            Disease = "Hepatitis B",
+            DiseaseSymptoms = "Fever, Fatigue, Abdominal pain, Jaundice",
+            DiseaseComplications = "Liver cancer, Liver failure",
+            RecommendedAge = 0.5,
+            DateTimeCreated = DateTime.UtcNow
+        },
+        new Vaccine()
+        {
+            Name = "Pentavalent Vaccine",
+            LotNumber = "PV5678",
+            Manufacturer = "Pfizer",
+            ExpirationDate = new DateTime(2024, 4, 1),
+            Disease = "Diphtheria, Tetanus, Pertussis, Hepatitis B, Haemophilus influenzae type b",
+            DiseaseSymptoms = "Fever, Cough, Sore throat, Weakness, Vomiting",
+            DiseaseComplications = "Brain damage, Pneumonia, Ear infection",
+            RecommendedAge = 2,
+            DateTimeCreated = DateTime.UtcNow
+        },
+        new Vaccine()
+        {
+            Name = "Oral Polio Vaccine",
+            LotNumber = "OPV9012",
+            Manufacturer = "Sanofi",
+            ExpirationDate = new DateTime(2023, 12, 1),
+            Disease = "Polio",
+            DiseaseSymptoms = "Fever, Sore throat, Headache, Vomiting",
+            DiseaseComplications = "Paralysis, Difficulty breathing",
+            RecommendedAge = 1.5,
+            DateTimeCreated = DateTime.UtcNow
+        },
+        new Vaccine()
+        {
+            Name = "Inactivated Polio Vaccine",
+            LotNumber = "IPV3456",
+            Manufacturer = "Novartis",
+            ExpirationDate = new DateTime(2022, 8, 1),
+            Disease = "Polio",
+            DiseaseSymptoms = "Fever, Sore throat, Headache, Vomiting",
+            DiseaseComplications = "Paralysis, Difficulty breathing",
+            RecommendedAge = 2,
+            DateTimeCreated = DateTime.UtcNow
+        },
+        new Vaccine()
+        {
+            Name = "Pneumococcal Vaccine",
+            LotNumber = "PV8910",
+            Manufacturer = "Johnson & Johnson",
+            ExpirationDate = new DateTime(2023, 6, 1),
+            Disease = "Pneumococcal disease",
+            DiseaseSymptoms = "Fever, Cough, Chest pain, Shortness of breath",
+            DiseaseComplications = "Meningitis, Blood infection, Pneumonia",
+            RecommendedAge = 2,
+            DateTimeCreated = DateTime.UtcNow
+        },
+        new Vaccine()
+        {
+            Name = "Measles, Mumps, Rubella",
+            LotNumber = "MMR1112",
+            Manufacturer = "Merck",
+            ExpirationDate = new DateTime(2024, 1, 1),
+            Disease = "Measles, Mumps, Rubella",
+            DiseaseSymptoms = "Fever, Rash, Swollen glands, Muscle pain",
+            DiseaseComplications = "Encephalitis, Meningitis, Deafness",
+            RecommendedAge = 1,
+            DateTimeCreated = DateTime.UtcNow
+        }
+    };
+
+    await context.Vaccines.AddRangeAsync(vaccines);
+    await context.SaveChangesAsync();
+}
 
 
 app.Run();
