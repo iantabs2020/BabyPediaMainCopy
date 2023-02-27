@@ -57,6 +57,36 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpGet("/parent/currentappointment")]
+    public async Task<IActionResult> ParentCurrentAppointment()
+    {
+        var currentUserId = _userManager.GetUserId(User);
+        var currentParent = await _babyPediaContext.Parents
+            .Include(x => x.Appointments)
+            .ThenInclude(x => x.AppointmentType)
+            .Include(x => x.Appointments)
+            .ThenInclude(x => x.Pedia)
+            .Include(x => x.Appointments)
+            .ThenInclude(x => x.Child)
+            .Include(x => x.Appointments)
+            .ThenInclude(x => x.Payment)
+            .FirstOrDefaultAsync(x => x.Id == currentUserId);
+        return View(currentParent.Appointments.LastOrDefault());
+
+    }
+
+    [HttpGet("/pedia/appointment/{id}")]
+    public async Task<IActionResult> PediaChat(long id)
+    {
+        return View(await _babyPediaContext.Appointments
+            .Include(x=>x.Child)
+            .Include(x=>x.Parent)
+            .Include(x=>x.Payment)
+            .Include(x=>x.Pedia)
+            .Include(x=>x.AppointmentType)
+            .FirstOrDefaultAsync(x => x.Id == id));
+    }
+
     [HttpGet("/pedia/childinformation/{id}")]
     public async Task<IActionResult> ChildInformation(long id)
     {
@@ -98,6 +128,40 @@ public class HomeController : Controller
         return Redirect(
             $"/admin?message={foundPedia.UserName} is {(foundPedia.IsVerified ? "Verified!" : "Unverified!")}!"
         );
+    }
+
+    [HttpGet("/prescriptions/{id}")]
+    public async Task<IActionResult> Prescription(long id)
+    {
+        return View(await _babyPediaContext.Appointments
+            .Include(x=>x.Child)
+            .Include(x=>x.Parent)
+            .Include(x=>x.Payment)
+            .Include(x=>x.AppointmentType)
+            .FirstOrDefaultAsync(x => x.Id == id));
+    }
+    
+    [HttpGet("/prescribe/{id}")]
+    public async Task<IActionResult> PrescribeForm(long id)
+    {
+        return View(await _babyPediaContext.Appointments
+            .Include(x=>x.Child)
+            .Include(x=>x.Parent)
+            .Include(x=>x.Payment)
+            .Include(x=>x.AppointmentType)
+            .FirstOrDefaultAsync(x => x.Id == id));
+    }
+
+    [HttpPost("/prescribe/add")]
+    public async Task<IActionResult> AddPrescription(Appointment appointment)
+    {
+        var exisintAppointment = await _babyPediaContext.Appointments.FirstOrDefaultAsync(x => x.Id == appointment.Id);
+        exisintAppointment.Prescription = appointment.Prescription;
+
+        _babyPediaContext.Update(exisintAppointment);
+        await _babyPediaContext.SaveChangesAsync();
+        
+        return Redirect("/pedia/appointmentlist");
     }
 
     [HttpGet("/vaccines/{id}")]
