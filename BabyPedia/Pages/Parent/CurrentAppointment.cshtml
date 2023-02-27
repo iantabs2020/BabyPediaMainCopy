@@ -1,4 +1,4 @@
-﻿@page
+
 @using BabyPedia.Data
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="row container">
-        <a href="" class="btn-primary btn m-2">View Prescription</a>
+        <a href="/prescriptions/@appointment.Id" class="btn-primary btn m-2">View Prescription</a>
         <a href="" class="btn-success btn m-2">Download</a>
         <a href="" class="btn-danger btn m-2">Launch Meeting</a>
     </div>
