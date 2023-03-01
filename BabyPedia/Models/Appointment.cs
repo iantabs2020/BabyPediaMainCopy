@@ -8,6 +8,8 @@ public class Appointment
 
     public string AppointmentDate { get; set; }
     public string AppointmentTime { get; set; }
+    
+    public string? Prescription { get; set; }
 
     public AppointmentPayment Payment { get; set; }
     public AppointmentType AppointmentType { get; set; }
