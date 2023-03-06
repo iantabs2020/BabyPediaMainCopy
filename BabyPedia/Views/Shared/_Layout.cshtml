@@ -36,10 +36,10 @@
                     @if (User.IsInRole("Parent"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/parent/appointmentlist"><i class="bi bi-card-list"></i> Appointments</a>
+                            <a class="nav-link text-dark" href="/parent"><i class="bi bi-house-fill"></i> Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/parent"><i class="bi bi-house-fill"></i> Home</a>
+                            <a class="nav-link text-dark" href="/parent/appointmentlist"><i class="bi bi-card-list"></i> Appointments</a>
                         </li>
                         @* <li class="nav-item"> *@
                         @*     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Services"><i class="bi bi-balloon-heart-fill"></i> Services</a> *@
@@ -135,11 +135,20 @@
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2022 - BabyPedia
-    </div>
-</footer>
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 container border-top">
+    <p class="col-md-4 mb-0 text-muted">© 2023 BabyPedia</p>
+
+    <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+    </a>
+
+    <ul class="nav col-md-4 justify-content-end">
+      <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
+      <li class="nav-item"><a href="/Home/Services" class="nav-link px-2 text-muted">Services</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+    </ul>
+  </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
