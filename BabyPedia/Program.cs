@@ -1,3 +1,4 @@
+using BabyPedia.Controllers;
 using BabyPedia.Data;
 using BabyPedia.Models;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<BabyPediaContext>(o =>
     o.EnableSensitiveDataLogging();
 });
 
+builder.Services.AddSignalR();
+
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     {
         options.Password.RequireDigit = false;
@@ -21,12 +24,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
         options.Password.RequireLowercase = false;
         options.Password.RequireUppercase = false;
         options.Password.RequireNonAlphanumeric = false;
-        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedEmail = true;
         options.SignIn.RequireConfirmedPhoneNumber = false;
         options.SignIn.RequireConfirmedAccount = false;
     })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<BabyPediaContext>();
+builder.Services.AddSingleton<EmailHandler>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 var app = builder.Build();
@@ -44,7 +48,8 @@ app.UseStaticFiles();
 app.MapRazorPages();
 app.UseRouting();
 app.UseAuthentication();
-;
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.UseAuthorization();
 
@@ -72,6 +77,7 @@ async Task CreateAccountsAndRole(UserManager<IdentityUser> userManager, RoleMana
             {
                 Email = adminEmail,
                 UserName = adminEmail,
+                EmailConfirmed = true
             };
 
             IdentityResult result = await userManager.CreateAsync(adminUser, adminPassword);
@@ -99,7 +105,8 @@ async Task CreateAccountsAndRole(UserManager<IdentityUser> userManager, RoleMana
             {
                 Email = pediaEmail,
                 UserName = pediaEmail,
-                FirstName = "Michael"
+                FirstName = "Michael", 
+                EmailConfirmed = true
             };
 
             IdentityResult result = await userManager.CreateAsync(adminUser, pediaPassword);
@@ -126,7 +133,8 @@ async Task CreateAccountsAndRole(UserManager<IdentityUser> userManager, RoleMana
             Parent adminUser = new Parent
             {
                 Email = pediaEmail,
-                UserName = pediaEmail
+                UserName = pediaEmail,
+                EmailConfirmed = true
             };
 
             IdentityResult result = await userManager.CreateAsync(adminUser, pediaPassword);
