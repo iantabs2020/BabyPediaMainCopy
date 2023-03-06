@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace BabyPedia.Models;
 
@@ -21,4 +21,9 @@ public class PartneredPedia : IdentityUser
     public List<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public DateTime DateTimeCreated { get; set; } = DateTime.Today;
+
+    public List<PediaPayment> PediaPayments { get; set; } =
+        new List<PediaPayment>();
+
+    public bool IsVerified { get; set; } = false;
 }
