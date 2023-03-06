@@ -68,14 +68,14 @@
     <div class="container mt-4">
         <h1 class="text-center">
             <p class="text-center fw-bold text-primary">
-                Appointment History
+                <i class="bi bi-bookshelf"></i> Appointment History
             </p>
         </h1>
         <div class="d-flex flex-row">
             <a class="m-2 btn text-dark" style="background-color: #FF9E7A !important;">Export Audit Log</a>
             @if (currentParent?.Appointments.LastOrDefault() is null)
             {
-                <a href="./registerappointment" class="btn m-2 btn-primary">Request Appointment</a>
+                <a href="./registerappointment" class="btn m-2 btn-primary"><i class="bi bi-plus-lg"></i> Request Appointment</a>
             }
             else
             {
