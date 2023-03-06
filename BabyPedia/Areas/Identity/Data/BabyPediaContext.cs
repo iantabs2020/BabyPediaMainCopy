@@ -1,4 +1,4 @@
-﻿using BabyPedia.Models;
+using BabyPedia.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +10,8 @@ public class BabyPediaContext : IdentityDbContext<IdentityUser>
     public DbSet<Appointment> Appointments { get; set; }
 
     public DbSet<AppointmentPayment> AppointmentPayments { get; set; }
+    public DbSet<PediaPayment> PediaPayments { get; set; }
+    public DbSet<Chat> Chats { get; set; }
 
     public DbSet<AppointmentType> AppointmentTypes { get; set; }
 
@@ -34,7 +36,6 @@ public class BabyPediaContext : IdentityDbContext<IdentityUser>
     public BabyPediaContext(DbContextOptions<BabyPediaContext> options)
         : base(options)
     {
-
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
