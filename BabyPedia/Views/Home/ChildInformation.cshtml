@@ -3,11 +3,17 @@
 @{
     ViewData["Registered"] = true;
     Layout = "_Layout";
-    
+
     var textBoxClasses = new Dictionary<string, object>()
     {
         { "class", "form-control" },
         // { "readonly", "readonly" },
+    };
+
+    var textBoxClassesr = new Dictionary<string, object>()
+    {
+        { "class", "form-control" },
+        { "readonly", "readonly" },
     };
 
 }
@@ -19,15 +25,19 @@
 <form class="container-fluid row" action="/register-child" method="post">
     <div class="col-md-6 col-12">
         <div class="form-floating mb-3">
+            @Html.TextBoxFor(m => m.Id, htmlAttributes: textBoxClassesr)
+            @Html.LabelFor(x => x.Id)
+        </div>
+        <div class="form-floating mb-3">
             @Html.TextBoxFor(m => m.FirstName, htmlAttributes: textBoxClasses)
             @Html.LabelFor(x => x.FirstName)
         </div>
-        
+
         <div class="form-floating mb-3">
             @Html.TextBoxFor(m => m.LastName, htmlAttributes: textBoxClasses)
             @Html.LabelFor(x => x.LastName)
         </div>
-        
+
         <div class="form-floating mb-3">
             @Html.TextBoxFor(m => m.DateTimeCreated, htmlAttributes: textBoxClasses)
             @Html.LabelFor(x => x.DateTimeCreated)
