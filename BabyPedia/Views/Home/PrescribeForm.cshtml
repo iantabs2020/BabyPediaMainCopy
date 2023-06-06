@@ -55,7 +55,7 @@
             @Html.LabelFor(x => x.AppointmentDate)
         </div>
         <div class="form-floating mb-3">
-            @Html.TextBoxFor(m => m.Prescription, htmlAttributes: textBoxClasses)
+            @Html.TextBoxFor(m => m.Prescription,  new { @class = "form-control", rows = 5 })
             @Html.LabelFor(x => x.Prescription)
         </div>
 
